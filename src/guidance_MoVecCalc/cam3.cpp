@@ -158,7 +158,7 @@ int main(int argc, char** argv)
 	}
 
     /* initialize ros */
-    ros::init(argc, argv, "GuidanceNode_Camera1");
+    ros::init(argc, argv, "GuidanceNode_Camera3");
     ros::NodeHandle my_node;
     left_image_pub			= my_node.advertise<sensor_msgs::Image>("/guidance/3/left_image",1);
     right_image_pub			= my_node.advertise<sensor_msgs::Image>("/guidance/3/right_image",1);

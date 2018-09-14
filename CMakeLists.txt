@@ -53,24 +53,28 @@ add_executable(guidanceNode
   src/GuidanceNode.cpp
   src/DJI_utility.cpp)
 
-add_executable(guidanceNode_Cam1
-  src/guidance_cameraNodes/cam1.cpp
+add_executable(GuidanceNode_USonic_Mot_Vel
+  src/guidance_MoVecCalc/vel_motion_imu.cpp
   src/DJI_utility.cpp)
+  
+add_executable(guidanceNode_Cam1
+  src/guidance_MoVecCalc/cam1.cpp
+  src/DJI_utility.cpp) 
 
 add_executable(guidanceNode_Cam2
-  src/guidance_cameraNodes/cam2.cpp
+  src/guidance_MoVecCalc/cam2.cpp
   src/DJI_utility.cpp)
 
 add_executable(guidanceNode_Cam3
-  src/guidance_cameraNodes/cam3.cpp
+  src/guidance_MoVecCalc/cam3.cpp
   src/DJI_utility.cpp)
 
 add_executable(guidanceNode_Cam4
-  src/guidance_cameraNodes/cam4.cpp
+  src/guidance_MoVecCalc/cam4.cpp
   src/DJI_utility.cpp)
 
 add_executable(guidanceNode_Cam5
-  src/guidance_cameraNodes/cam5.cpp
+  src/guidance_MoVecCalc/cam5.cpp
   src/DJI_utility.cpp)
 
 add_executable(guidanceNodeTest

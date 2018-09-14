@@ -41,7 +41,7 @@ namespace camera1
 char        	key       = 0;
 bool            show_images = 0;
 uint8_t         verbosity = 0;
-e_vbus_index	CAMERA_ID = e_vbus2;
+e_vbus_index	CAMERA_ID = e_vbus5;
 DJI_lock        g_lock;
 DJI_event       g_event;
 Mat             g_greyscale_image_left(HEIGHT, WIDTH, CV_8UC1);
@@ -87,7 +87,7 @@ int my_callback(int data_type, int data_len, char *content)
 			// publish left greyscale image
 			cv_bridge::CvImage left_8;
 			g_greyscale_image_left.copyTo(left_8.image);
-			left_8.header.frame_id  = "guidance/2/left";
+			left_8.header.frame_id  = "guidance/5/left";
 			left_8.header.stamp	= ros::Time::now();
 			left_8.encoding		= sensor_msgs::image_encodings::MONO8;
 			left_image_pub.publish(left_8.toImageMsg());
@@ -97,7 +97,7 @@ int my_callback(int data_type, int data_len, char *content)
 			// publish right greyscale image
 			cv_bridge::CvImage right_8;
 			g_greyscale_image_right.copyTo(right_8.image);
-			right_8.header.frame_id  = "guidance/2/right";
+			right_8.header.frame_id  = "guidance/5/right";
 			right_8.header.stamp	 = ros::Time::now();
 			right_8.encoding  	 = sensor_msgs::image_encodings::MONO8;
 			right_image_pub.publish(right_8.toImageMsg());
@@ -111,7 +111,7 @@ int my_callback(int data_type, int data_len, char *content)
 		// publish obstacle distance
 		sensor_msgs::LaserScan g_oa;
 		g_oa.ranges.resize(camera1::cAMERA_PAIR_NUM);
-		g_oa.header.frame_id = "guidance/2/obstacle";
+		g_oa.header.frame_id = "guidance/5/obstacle";
 		g_oa.header.stamp    = ros::Time::now();
 		for ( int i = 0; i < camera1::cAMERA_PAIR_NUM; ++i )
 			g_oa.ranges[i] = 0.01f * oa->distance[i];
@@ -125,7 +125,7 @@ int my_callback(int data_type, int data_len, char *content)
 		sensor_msgs::LaserScan g_ul;
 		g_ul.ranges.resize(camera1::cAMERA_PAIR_NUM);
 		g_ul.intensities.resize(camera1::cAMERA_PAIR_NUM);
-		g_ul.header.frame_id = "guidance/2/ultrasonic";
+		g_ul.header.frame_id = "guidance/5/ultrasonic";
 		g_ul.header.stamp    = ros::Time::now();
 		g_ul.ranges[0] = 0.001f*ultrasonic->ultrasonic[CAMERA_ID];
 		g_ul.intensities[0] = 1.0 * ultrasonic->reliability[CAMERA_ID];
@@ -158,12 +158,12 @@ int main(int argc, char** argv)
 	}
 
     /* initialize ros */
-    ros::init(argc, argv, "GuidanceNode_Camera1");
+    ros::init(argc, argv, "GuidanceNode_Camera5");
     ros::NodeHandle my_node;
-    left_image_pub			= my_node.advertise<sensor_msgs::Image>("/guidance/2/left_image",1);
-    right_image_pub			= my_node.advertise<sensor_msgs::Image>("/guidance/2/right_image",1);
-    obstacle_distance_pub	= my_node.advertise<sensor_msgs::LaserScan>("/guidance/2/obstacle_distance",1);
-    ultrasonic_pub			= my_node.advertise<sensor_msgs::LaserScan>("/guidance/2/ultrasonic",1);
+    left_image_pub			= my_node.advertise<sensor_msgs::Image>("/guidance/5/left_image",1);
+    right_image_pub			= my_node.advertise<sensor_msgs::Image>("/guidance/5/right_image",1);
+    obstacle_distance_pub	= my_node.advertise<sensor_msgs::LaserScan>("/guidance/5/obstacle_distance",1);
+    ultrasonic_pub			= my_node.advertise<sensor_msgs::LaserScan>("/guidance/5/ultrasonic",1);
 
     /* initialize guidance */
     reset_config();

@@ -25,21 +25,13 @@ ros::Publisher imu_pub;
 ros::Publisher velocity_pub;
 ros::Publisher motion_pub;
 
+
 using namespace cv;
 
-#define WIDTH 320
-#define HEIGHT 240
-#define IMAGE_SIZE (HEIGHT * WIDTH)
-
 char        	key       = 0;
-bool            show_images = 0;
 uint8_t         verbosity = 0;
-e_vbus_index	CAMERA_ID = e_vbus1;
 DJI_lock        g_lock;
 DJI_event       g_event;
-Mat             g_greyscale_image_left(HEIGHT, WIDTH, CV_8UC1);
-Mat				g_greyscale_image_right(HEIGHT, WIDTH, CV_8UC1);
-
 
 std::ostream& operator<<(std::ostream& out, const e_sdk_err_code value){
 	const char* s = 0;
@@ -140,7 +132,6 @@ std::cout<<"Error: "<<(e_sdk_err_code)err_code<<" at "<<__LINE__<<","<<__FILE__<
 int main(int argc, char** argv)
 {
     if (argc < 2) {
-        show_images = true;
         verbosity = 2;
     }
 	if(argc==2 && !strcmp(argv[1], "h")){
@@ -152,7 +143,6 @@ int main(int argc, char** argv)
 			" 'q' to quit.");
 		return 0;
 	}
-
     /* initialize ros */
     ros::init(argc, argv, "GuidanceNode_USonic_Mot_Vel");
     ros::NodeHandle my_node;

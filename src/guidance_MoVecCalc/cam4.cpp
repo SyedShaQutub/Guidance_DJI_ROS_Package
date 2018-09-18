@@ -113,8 +113,7 @@ int my_callback(int data_type, int data_len, char *content)
 		g_oa.ranges.resize(camera1::cAMERA_PAIR_NUM);
 		g_oa.header.frame_id = "guidance/4/obstacle";
 		g_oa.header.stamp    = ros::Time::now();
-		for ( int i = 0; i < camera1::cAMERA_PAIR_NUM; ++i )
-			g_oa.ranges[i] = 0.01f * oa->distance[i];
+		g_oa.ranges[0] = 0.01f * oa->distance[0];
 		obstacle_distance_pub.publish(g_oa);
 	}
     /* ultrasonic */

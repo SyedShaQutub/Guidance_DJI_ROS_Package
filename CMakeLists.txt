@@ -49,6 +49,10 @@ link_libraries(
 message(STATUS "Opencv_include_dirs: " ${OpenCV_INCLUDE_DIRS})
 message(STATUS "OpenCV_LIBS: " ${OpenCV_LIBS})
 
+add_executable(Guidance_complete
+  src/Guidance_complete.cpp
+  src/DJI_utility.cpp)
+
 add_executable(guidanceNode
   src/GuidanceNode.cpp
   src/DJI_utility.cpp)
@@ -56,7 +60,7 @@ add_executable(guidanceNode
 add_executable(GuidanceNode_USonic_Mot_Vel
   src/guidance_MoVecCalc/vel_motion_imu.cpp
   src/DJI_utility.cpp)
-  
+
 add_executable(guidanceNode_Cam1
   src/guidance_MoVecCalc/cam1.cpp
   src/DJI_utility.cpp) 

@@ -326,56 +326,6 @@ int main(int argc, char** argv)
 	while (ros::ok())
 	{
 		g_event.wait_event();
-		if (key > 0){
-			// set exposure parameters
-			if(key=='j' || key=='k' || key=='m' || key=='n'){
-				if(key=='j'){
-					if(para.m_is_auto_exposure) para.m_expected_brightness += 20;
-					else para.m_exposure_time += 3;
-				}
-				else if(key=='k'){
-					if(para.m_is_auto_exposure) para.m_expected_brightness -= 20;
-					else para.m_exposure_time -= 3;
-				}
-				else if(key=='m'){
-					para.m_is_auto_exposure = !para.m_is_auto_exposure;
-                    std::cout<<"exposure is "<<para.m_is_auto_exposure<<std::endl;
-				}
-				else if(key=='n'){//return to default
-					para.m_expected_brightness = para.m_exposure_time = 0;
-				}
-
-                std::cout<<"Setting exposure parameters....SensorId="<<CAMERA_ID<<std::endl;
-                para.m_camera_pair_index = CAMERA_ID;
-				set_exposure_param(&para);
-				key = 0;
-			}
-			else if (key == 'q' || key == 'w' || key == 'd' || key == 'x' || key == 'a' || key == 's'){// switch image direction
-				err_code = stop_transfer();
-				RETURN_IF_ERR(err_code);
-				reset_config();
-
-				if (key == 'q') break;
-				if (key == 'w') CAMERA_ID = e_vbus1;
-				if (key == 'd') CAMERA_ID = e_vbus2;
-				if (key == 'x') CAMERA_ID = e_vbus3;
-				if (key == 'a') CAMERA_ID = e_vbus4;	   
-				if (key == 's') CAMERA_ID = e_vbus5;
-
-				select_greyscale_image(CAMERA_ID, true);
-				select_greyscale_image(CAMERA_ID, false);
-				select_depth_image(CAMERA_ID);
-
-                select_imu();
-                select_ultrasonic();
-                select_obstacle_distance();
-                select_velocity();
-
-				err_code = start_transfer();
-				RETURN_IF_ERR(err_code);
-				key = 0;
-            }
-		}
         ros::spinOnce();
 	}
 

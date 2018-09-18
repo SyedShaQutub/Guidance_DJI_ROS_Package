@@ -43,7 +43,6 @@
 
  char       key         = 0;
  bool       show_images = 0;
- uint8_t    verbosity = 0;
  DJI_lock   g_lock;
  DJI_event  g_event;
 
@@ -102,11 +101,6 @@ int my_callback(int data_type, int data_len, char *content)
   if ( e_imu == data_type && NULL != content )
   {
       imu *imu_data = (imu*)content;
-      if (verbosity > 1) {
-          printf( "frame index: %d, stamp: %d\n", imu_data->frame_index, imu_data->time_stamp );
-          printf( "imu: [%f %f %f %f %f %f %f]\n", imu_data->acc_x, imu_data->acc_y, imu_data->acc_z, imu_data->q[0], imu_data->q[1], imu_data->q[2], imu_data->q[3] );
-
-      }
   	// publish imu data
 		geometry_msgs::TransformStamped g_imu;
 		g_imu.header.frame_id = "guidance";
@@ -124,10 +118,6 @@ int my_callback(int data_type, int data_len, char *content)
   if ( e_velocity == data_type && NULL != content )
   {
       velocity *vo = (velocity*)content;
-      if (verbosity > 1) {
-          printf( "frame index: %d, stamp: %d\n", vo->frame_index, vo->time_stamp );
-          printf( "vx:%f vy:%f vz:%f\n", 0.001f * vo->vx, 0.001f * vo->vy, 0.001f * vo->vz );
-      }
 
 		// publish velocity
 		geometry_msgs::Vector3Stamped g_vo;
@@ -143,10 +133,6 @@ int my_callback(int data_type, int data_len, char *content)
   if ( e_motion == data_type && NULL != content )
   {
   	motion *mo = (motion*)content;
-//        if (verbosity > 1) {
-//            printf( "frame index: %d, stamp: %d\n", vo->frame_index, vo->time_stamp );
-//            printf( "vx:%f vy:%f vz:%f\n", 0.001f * vo->vx, 0.001f * vo->vy, 0.001f * vo->vz );
-//        }
 
 		// publish velocity
 		geometry_msgs::Vector3Stamped g_mo;
@@ -161,15 +147,6 @@ int my_callback(int data_type, int data_len, char *content)
   if ( e_obstacle_distance == data_type && NULL != content )
   {
       obstacle_distance *oa = (obstacle_distance*)content;
-      if (verbosity > 1) {
-          printf( "frame index: %d, stamp: %d\n", oa->frame_index, oa->time_stamp );
-          printf( "obstacle distance:" );
-          for ( int i = 0; i < CAMERA_PAIR_NUM; ++i )
-          {
-              printf( " %f ", 0.01f * oa->distance[i] );
-          }
-          printf( "\n" );
-      }
 
 		// publish obstacle distance
 		sensor_msgs::LaserScan g_oa;
@@ -218,6 +195,7 @@ int main(int argc, char** argv)
   imu_pub      = my_node.advertise<geometry_msgs::TransformStamped>("/guidance/imu",1);
   velocity_pub = my_node.advertise<geometry_msgs::Vector3Stamped>("/guidance/velocity",1);
   motion_pub   = my_node.advertise<geometry_msgs::Vector3Stamped>("/guidance/motion",1);
+  obstacle_distance_pub	= my_node.advertise<sensor_msgs::LaserScan>("/guidance/obstacle_distance",1);
 
 
   images[0].header.frame_id = "guidanceDown";
@@ -253,7 +231,8 @@ int main(int argc, char** argv)
   {
     std::cout<<cali[i].cu<<"\t"<<cali[i].cv<<"\t"<<cali[i].focal<<"\t"<<cali[i].baseline<<std::endl;
   }
-
+  err_code = set_image_frequecy(e_frequecy_20);
+  RETURN_IF_ERR(err_code);
   /* select data */
   err_code = select_greyscale_image(e_vbus1, true);
   RETURN_IF_ERR(err_code);
